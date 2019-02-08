@@ -1,4 +1,4 @@
-use std::ops::{Add, Div, Mul, Neg, Sub};
+use std::ops::{Add, Div, Mul, Neg, Sub, Rem};
 use std::cmp::{PartialEq, PartialOrd, Ordering};
 
 #[derive(Debug, Clone, Copy)]
@@ -9,7 +9,8 @@ pub struct Vec3
   pub z: f32
 }
 
-impl Add for Vec3 {
+impl Add for Vec3
+{
   type Output = Vec3;
   fn add(self, other: Vec3) -> Vec3
   {
@@ -22,7 +23,8 @@ impl Add for Vec3 {
   }
 }
 
-impl Sub for Vec3 {
+impl Sub for Vec3
+{
   type Output = Vec3;
   fn sub(self, other: Vec3) -> Vec3
   {
@@ -35,7 +37,8 @@ impl Sub for Vec3 {
   }
 }
 
-impl Mul for Vec3 {
+impl Mul for Vec3
+{
   type Output = f32;
   fn mul(self, other: Vec3) -> f32
   {
@@ -45,7 +48,8 @@ impl Mul for Vec3 {
   }
 }
 
-impl Div for Vec3 {
+impl Div for Vec3
+{
   type Output = Vec3;
   fn div(self, other: Vec3) -> Vec3
   {
@@ -58,7 +62,22 @@ impl Div for Vec3 {
   }
 }
 
-impl Neg for Vec3 {
+impl Rem for Vec3
+{
+  type Output = Vec3;
+  fn rem(self, other: Vec3) -> Vec3
+  {
+    Vec3
+    {
+      x: self.x % other.x,
+      y: self.y % other.y,
+      z: self.z % other.z
+    }
+  }
+}
+
+impl Neg for Vec3
+{
   type Output = Vec3;
   fn neg(self) -> Vec3
   {
@@ -71,14 +90,16 @@ impl Neg for Vec3 {
   }
 }
 
-impl PartialEq for Vec3 {
+impl PartialEq for Vec3
+{
   fn eq(&self, other: &Vec3) -> bool
   {
     (self.x, self.y, self.z) == (other.x, other.y, other.z)
   }
 }
 
-impl PartialOrd for Vec3 {
+impl PartialOrd for Vec3
+{
   fn partial_cmp(&self, other: &Vec3) -> Option<Ordering>
   {
     (self.x, self.y, self.z).partial_cmp(&(other.x, other.y, other.z))

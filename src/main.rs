@@ -38,7 +38,42 @@ fn scene_intersect(orig: Vec3, dir: Vec3, spheres: &[Sphere]) -> Option<(Vec3, V
     };
   }
 
-  if spheres_dist < f32::MAX
+
+  let mut checkerboard_dist = f32::MAX;
+  if dir.y.abs() > 1e-3
+  {
+    let plane = Vec3::new(0.0, 10.0, -20.0);
+    let plane_size = 10.0;
+
+    let d = -(orig.y + plane.y) / dir.y;
+
+    let pt = orig + dir.scale(d);
+    let p = pt - plane;
+
+    if d > 0.0 &&
+       d < spheres_dist &&
+       p.x.abs() < plane_size &&
+       p.z.abs() < plane_size
+    {
+      checkerboard_dist = d;
+      hit = pt;
+      n = Vec3::new(0.0, 1.0, 0.0);
+
+      let mods = p.add(plane_size).scale(1.5) % Vec3::new(2.0, 2.0, 2.0);
+      material.diffuse_colour = if (mods.x as i32 == 0) == (mods.z as i32 == 0)
+      {
+        Vec3::new(1.0, 0.0, 0.0)
+      }
+      else
+      {
+        Vec3::new(0.0, 0.0, 1.0)
+      };
+      material.specular_exponent = 20.0;
+      material.albedo = Vec3::new(0.1, 0.1, 0.1);
+    }
+  }
+
+  if spheres_dist.min(checkerboard_dist) < f32::MAX
   {
     Some((hit, n, material))
   }
